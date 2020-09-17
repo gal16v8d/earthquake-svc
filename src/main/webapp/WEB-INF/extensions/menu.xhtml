@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <script type="application/javascript">
+        setTimeout(function() {
+            if(#{beanSismos.autoUpdate}) {
+                document.getElementById("formFilterSismos:btnConsultarSismos").click();
+            };
+        }, 60000);
+    </script>
+    <table width="100%" align="center">
+        <tr>
+            <td align="center">
+                <table>
+                    <tr>
+                        <td align="center">
+                            <h:form id="formFilterSismos">
+                                <table>
+                                    <tr>
+                                        <td align="right">
+                                            <h:outputLabel for="btnAuto" value="Auto:"/>
+                                        </td>
+                                        <td>
+                                            <p:commandButton id="btnAuto" ajax="false"
+                                                             title="Auto Update"
+                                                             icon="#{beanSismos.iconUpdate}"
+                                                             alt="Auto Update" action="#{beanSismos.doAutoUpdate}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <h:outputLabel for="lblMagnitud" value="Magnitud+:"/>
+                                        </td>
+                                        <td>
+                                            <p:spinner id="lblMagnitud" value="#{beanSismos.minMagnitud}"
+                                                       size="5" min="1" decimalPlaces="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <h:outputLabel for="lblDias" value="Días:"/>
+                                        </td>
+                                        <td>
+                                            <p:spinner id="lblDias" value="#{beanSismos.dias}"
+                                                       disabled="#{beanSismos.porFechas}"
+                                                       size="5" min="0" max="30"
+                                                       decimalPlaces="0"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <h:outputLabel for="lblRango" value="Por Fechas:"/>
+                                        </td>
+                                        <td>
+                                            <p:selectBooleanCheckbox id="lblRango" value="#{beanSismos.porFechas}">
+                                                <p:ajax event="change" update="lblDias calFechaInicio calFechaFin" />
+                                            </p:selectBooleanCheckbox>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h:outputLabel value="Fecha de Inicio:"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="2">
+                                            <p:calendar id="calFechaInicio" value="#{beanSismos.fechaInicio}"
+                                                        pattern="dd-MM-yyyy"
+                                                        disabled="#{!beanSismos.porFechas}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h:outputLabel value="Fecha de Fin:"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="2">
+                                            <p:calendar id="calFechaFin" value="#{beanSismos.fechaFin}"
+                                                        pattern="dd-MM-yyyy"
+                                                        disabled="#{!beanSismos.porFechas}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="center">
+                                            <p:commandButton id="btnConsultarSismos" ajax="false"
+                                                             title="Haz clic para buscar los sismos"
+                                                             alt="Haz clic para buscar los sismos"
+                                                             value="Ver Sismos" action="#{beanSismos.consultarSismos}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </h:form>
+                        </td>
+                    </tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr>
+                        <td align="center">
+                            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                                <input type="hidden" name="cmd" value="_s-xclick"/>
+                                <input type="hidden" name="hosted_button_id" value="BDBWXVDZJULMG"/>
+                                <input type="image" src="https://www.paypalobjects.com/es_XC/MX/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal, la forma más segura y rápida de pagar en línea."/>
+                                <img alt="" border="0" src="https://www.paypalobjects.com/es_XC/i/scr/pixel.gif" width="1" height="1"/>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</html>
