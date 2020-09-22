@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.gsdd.earthquake.service;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -13,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,88 +16,90 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import co.com.gsdd.earthquake.domain.DominioCount;
-import co.com.gsdd.earthquake.domain.DominioRequest;
-import co.com.gsdd.earthquake.domain.DominioSismos;
+import co.com.gsdd.earthquake.domain.EarthquakeCount;
+import co.com.gsdd.earthquake.domain.EarthquakeRequest;
+import co.com.gsdd.earthquake.domain.EarthquakeResponse;
+import lombok.extern.slf4j.Slf4j;
 
-/**
- *
- * @author JavaRevolutions
- */
+@Slf4j
 @Service
-public class EarthquakeService implements Serializable {
-	@Autowired
-	RestTemplate restTemplate;
-	private String URL_USGS_QUERY = "https://earthquake.usgs.gov/fdsnws/event/1/query";
-	private String URL_USGS_COUNT = "https://earthquake.usgs.gov/fdsnws/event/1/count";
-	HttpHeaders headers = new HttpHeaders();
-	HttpEntity<String> entity;
+public class EarthquakeService {
 
-	public EarthquakeService() {
+	private static final String USGS_BASE_URL = "https://earthquake.usgs.gov/fdsnws/event/1/";
+	private static final String USGS_COMMON_PARAMS = "format={format}&starttime={startTime}"
+			+ "&endtime={endTime}&minmagnitude={minMagnitude}";
+	private static final String URL_USGS_QUERY = USGS_BASE_URL + "query?" + USGS_COMMON_PARAMS
+			+ "&limit={limit}&offset={offset}";
+	private static final String URL_USGS_COUNT = USGS_BASE_URL + "count?" + USGS_COMMON_PARAMS;
+	private final RestTemplate restTemplate;
+	private HttpHeaders headers = new HttpHeaders();
+	private HttpEntity<String> entity;
+
+	@Autowired
+	public EarthquakeService(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+		initRestConsumption();
+	}
+
+	private void initRestConsumption() {
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		URL_USGS_QUERY += "?format={format}&starttime={starttime}&endtime={endtime}&minmagnitude={minmagnitude}";
-		URL_USGS_QUERY += "&limit={limit}&offset={offset}";
-		URL_USGS_COUNT += "?format={format}&starttime={starttime}&endtime={endtime}&minmagnitude={minmagnitude}";
 		entity = new HttpEntity<>(headers);
 	}
 
-	public DominioSismos consultaSismosByQuery(DominioRequest request) throws Exception {
-		Date date = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		if (request.isPorFechas()) {
-			date = request.getFechaFin();
-		}
-		String today = dateFormat.format(date);
-		today += " 23:59:59";
-		System.out.println("UTC today: " + today);
-
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, -request.getDias());
-		Date ayer = cal.getTime();
-		if (request.isPorFechas()) {
-			ayer = request.getFechaInicio();
-		}
-		String strAyer = dateFormat.format(ayer);
-		System.out.println("# Días a buscar: " + request.getDias());
-		System.out.println("UTC ayer: " + strAyer);
-
-		Map<String, Object> params = new HashMap<>();
-		params.put("format", "geojson");
-		params.put("starttime", strAyer);
-		params.put("endtime", today);
-		params.put("minmagnitude", request.getMinMagnitud());
+	public EarthquakeResponse earthquakeQuery(EarthquakeRequest request) throws Exception {
+		SimpleDateFormat dateFormat = setUpDateFormat();
+		String endTime = setUpEndTime(request, dateFormat);
+		String startTime = setUpStartTime(request, dateFormat);
+		Map<String, Object> params = defineQueryParams(startTime, endTime, request.getMinMagnitude());
 		params.put("limit", request.getLenght());
 		params.put("offset", request.getStart());
-
-		return restTemplate.exchange(URL_USGS_QUERY, HttpMethod.GET, entity, DominioSismos.class, params).getBody();
+		log.info("About to call {} service using params {}", URL_USGS_QUERY, params);
+		return restTemplate.exchange(URL_USGS_QUERY, HttpMethod.GET, entity, EarthquakeResponse.class, params)
+				.getBody();
 	}
 
-	public DominioCount countSismosByQuery(DominioRequest request) throws Exception {
-		System.out.println("#### Invoke Count. . .");
-		Date date = new Date();
+	public EarthquakeCount earthquakeCountQuery(EarthquakeRequest request) throws Exception {
+		SimpleDateFormat dateFormat = setUpDateFormat();
+		String endTime = setUpEndTime(request, dateFormat);
+		String startTime = setUpStartTime(request, dateFormat);
+		Map<String, Object> params = defineQueryParams(startTime, endTime, request.getMinMagnitude());
+		log.info("About to call {} service using params {}", URL_USGS_COUNT, params);
+		return restTemplate.exchange(URL_USGS_COUNT, HttpMethod.GET, entity, EarthquakeCount.class, params).getBody();
+	}
+
+	private SimpleDateFormat setUpDateFormat() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		if (request.isPorFechas()) {
-			date = request.getFechaFin();
-		}
-		String today = dateFormat.format(date);
-		today += " 23:59:59";
+		return dateFormat;
+	}
 
+	private String setUpStartTime(EarthquakeRequest request, SimpleDateFormat dateFormat) {
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, -request.getDias());
-		Date ayer = cal.getTime();
-		if (request.isPorFechas()) {
-			ayer = request.getFechaInicio();
+		cal.add(Calendar.DATE, -request.getDays());
+		Date startTime = cal.getTime();
+		if (request.isByDateRange()) {
+			startTime = request.getIniDate();
 		}
-		String strAyer = dateFormat.format(ayer);
+		return dateFormat.format(startTime);
+	}
+
+	private String setUpEndTime(EarthquakeRequest request, SimpleDateFormat dateFormat) {
+		Date date = new Date();
+		if (request.isByDateRange()) {
+			date = request.getEndDate();
+		}
+		String endTime = dateFormat.format(date);
+		endTime += " 23:59:59.999";
+		return endTime;
+	}
+
+	private Map<String, Object> defineQueryParams(String startTime, String endTime, double minMagnitude) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("format", "geojson");
-		params.put("starttime", strAyer);
-		params.put("endtime", today);
-		params.put("minmagnitude", request.getMinMagnitud());
-
-		return restTemplate.exchange(URL_USGS_COUNT, HttpMethod.GET, entity, DominioCount.class, params).getBody();
+		params.put("startTime", startTime);
+		params.put("endTime", endTime);
+		params.put("minMagnitude", minMagnitude);
+		return params;
 	}
 }

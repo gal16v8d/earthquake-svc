@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.gsdd.earthquake;
 
 import javax.faces.webapp.FacesServlet;
@@ -25,10 +20,11 @@ public class EarthquakeApp {
 	}
 
 	@Bean
-	public ServletRegistrationBean facesServletRegistration() {
-		ServletRegistrationBean registration = new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
+	public ServletRegistrationBean<FacesServlet> facesServletRegistration() {
+		ServletRegistrationBean<FacesServlet> registration = new ServletRegistrationBean<>(new FacesServlet(),
+				"*.xhtml");
 		registration.setLoadOnStartup(1);
-		registration.addUrlMappings("*.jr");
+		registration.addUrlMappings("*.gg");
 		return registration;
 	}
 
