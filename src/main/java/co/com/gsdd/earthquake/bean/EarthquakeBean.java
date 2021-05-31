@@ -9,8 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import co.com.gsdd.earthquake.domain.EarthquakeCoordinates;
 import co.com.gsdd.earthquake.domain.EarthquakeCount;
 import co.com.gsdd.earthquake.domain.EarthquakeProps;
@@ -18,10 +16,12 @@ import co.com.gsdd.earthquake.domain.EarthquakeRequest;
 import co.com.gsdd.earthquake.service.EarthquakeService;
 import co.com.gsdd.earthquake.util.EartquakeFeatureUtil;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 @Getter
 @Setter
 @Named(value = "earthquakeBean")
@@ -43,11 +43,6 @@ public class EarthquakeBean implements Serializable {
     private Date iniDate;
     private Date endDate;
     private String iconUpdate;
-    
-    @Autowired
-    public EarthquakeBean(EarthquakeService earthquakeSvc) {
-		this.earthquakeSvc = earthquakeSvc;
-	}
     
     @PostConstruct
     public void initBean() {
