@@ -1,4 +1,4 @@
-package co.com.gsdd.earthquake.domain;
+package com.gsdd.earthquake.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EarthquakeCoordinates {
-	
-    private double[] coordinates;
+
+  private double[] coordinates;
 
 }

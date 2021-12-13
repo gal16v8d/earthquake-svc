@@ -11,15 +11,15 @@
 		<relativePath />
 	</parent>
 
-	<groupId>co.com.gsdd</groupId>
+	<groupId>com.gsdd</groupId>
 	<artifactId>earthquake-svc</artifactId>
 	<version>1.0.001</version>
 	<packaging>jar</packaging>
 
+	<name>earthquake-svc</name>
 	<organization>
 		<name>GSDD</name>
 	</organization>
-	<name>earthquake-svc</name>
 
 	<repositories>
 		<repository>
@@ -42,6 +42,23 @@
 		<project.build.targetEncoding>${project.encoding}</project.build.targetEncoding>
 		<project.reporting.outputEncoding>${project.encoding}</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		
+		<mvn.jacoco.plugin.version>0.8.7</mvn.jacoco.plugin.version>
+		<mvn.failsafe.plugin.version>3.0.0-M4</mvn.failsafe.plugin.version>
+		<mvn.surefire.plugin.version>3.0.0-M4</mvn.surefire.plugin.version>
+		<mvn.format.plugin.version>2.10.0</mvn.format.plugin.version>
+
+		<!-- If true skips UT test execution -->
+		<skip.unit.tests>false</skip.unit.tests>
+		<!-- If true skips IT test execution -->
+		<skip.integration.tests>true</skip.integration.tests>
+		
+		<!-- JaCoCo props -->
+		<jacoco.ut.exec>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.exec>
+		<jacoco.ut.reportPath>${project.build.directory}/coverage-reports/jacoco-ut</jacoco.ut.reportPath>
+		<jacoco.it.exec>${project.build.directory}/coverage-reports/jacoco-it.exec</jacoco.it.exec>
+		<jacoco.it.reportPath>${project.build.directory}/coverage-reports/jacoco-it</jacoco.it.reportPath>
+		
 		<jsf.api.version>2.2.20</jsf.api.version>
 		<primefaces.version>8.0</primefaces.version>
 		<primefaces.theme.version>1.0.10</primefaces.theme.version>
@@ -70,6 +87,11 @@
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
 			<version>${jsf.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
@@ -114,6 +136,17 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -121,6 +154,129 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<!-- Used for unit tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${mvn.surefire.plugin.version}</version>
+				<configuration>
+					<!-- Sets the VM argument line used when unit tests are run. -->
+					<argLine>${surefireArgLine}</argLine>
+					<skipTests>${skip.unit.tests}</skipTests>
+					<!-- Excludes integration tests when unit tests are run. -->
+					<excludes>
+						<exclude>**/IT*.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${mvn.failsafe.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>integration-tests</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<!-- Sets the VM argument line used when integration tests are run. -->
+							<argLine>${failsafeArgLine}</argLine>
+							<skipTests>${skip.integration.tests}</skipTests>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${mvn.jacoco.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${jacoco.ut.exec}</destFile>
+							<propertyName>surefireArgLine</propertyName>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${jacoco.ut.exec}</dataFile>
+							<outputDirectory>${jacoco.ut.reportPath}</outputDirectory>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>pre-integration-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${jacoco.it.exec}</destFile>
+							<propertyName>failsafeArgLine</propertyName>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>post-integration-test</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${jacoco.it.exec}</dataFile>
+							<outputDirectory>${jacoco.it.reportPath}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>net.revelc.code.formatter</groupId>
+				<artifactId>formatter-maven-plugin</artifactId>
+				<version>${mvn.format.plugin.version}</version>
+				<configuration>
+					<configFile>${project.basedir}/eclipse-java-google-style.xml</configFile>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeArtifactIds>lombok</includeArtifactIds>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
