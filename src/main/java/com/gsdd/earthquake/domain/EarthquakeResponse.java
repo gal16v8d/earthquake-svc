@@ -9,12 +9,11 @@ import lombok.Setter;
 @Setter
 public class EarthquakeResponse {
 
-  private String type;
-  private List<EarthquakeFeatures> features;
-  private EarthquakeMetadata metadata;
+    private String type;
+    private List<EarthquakeFeatures> features;
+    private EarthquakeMetadata metadata;
 
-  public EarthquakeResponse() {
-    features = new ArrayList<>();
-  }
-
+    public EarthquakeResponse() {
+        features = new ArrayList<>();
+    }
 }

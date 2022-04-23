@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class EarthquakeCount {
 
-  private int count;
-  private int maxAllowed;
-
+    private int count;
+    private int maxAllowed;
 }
