@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class EarthquakeCoordinates {
 
-    private double[] coordinates;
+  private double[] coordinates;
 }

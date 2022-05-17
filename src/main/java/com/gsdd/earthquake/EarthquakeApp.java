@@ -13,35 +13,35 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class EarthquakeApp {
 
-    public static void main(String[] args) {
-        SpringApplication.run(EarthquakeApp.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(EarthquakeApp.class, args);
+  }
 
-    @Bean
-    public ServletRegistrationBean<FacesServlet> facesServletRegistration() {
-        ServletRegistrationBean<FacesServlet> registration =
-                new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
-        registration.setLoadOnStartup(1);
-        registration.addUrlMappings("*.gg");
-        return registration;
-    }
+  @Bean
+  public ServletRegistrationBean<FacesServlet> facesServletRegistration() {
+    ServletRegistrationBean<FacesServlet> registration =
+        new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
+    registration.setLoadOnStartup(1);
+    registration.addUrlMappings("*.gg");
+    return registration;
+  }
 
-    @Bean
-    public ServletContextInitializer servletContextInitializer() {
-        return servletContext -> {
-            servletContext.setInitParameter(
-                    "com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
-            servletContext.setInitParameter("primefaces.THEME", "sunny");
-        };
-    }
+  @Bean
+  public ServletContextInitializer servletContextInitializer() {
+    return servletContext -> {
+      servletContext.setInitParameter(
+          "com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
+      servletContext.setInitParameter("primefaces.THEME", "sunny");
+    };
+  }
 
-    @Bean
-    public ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
-        return new ServletListenerRegistrationBean<>(new ConfigureListener());
-    }
+  @Bean
+  public ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
+    return new ServletListenerRegistrationBean<>(new ConfigureListener());
+  }
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+  @Bean
+  public RestTemplate restTemplate() {
+    return new RestTemplate();
+  }
 }

@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class EarthquakeMetadata {
 
-    private int status;
-    private long count = 0;
+  private int status;
+  private long count = 0;
 }

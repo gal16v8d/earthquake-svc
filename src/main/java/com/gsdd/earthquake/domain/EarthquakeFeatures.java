@@ -7,8 +7,8 @@ import lombok.Setter;
 @Setter
 public class EarthquakeFeatures {
 
-    private String type;
-    private EarthquakeProps properties;
-    private EarthquakeCoordinates geometry;
-    private String id;
+  private String type;
+  private EarthquakeProps properties;
+  private EarthquakeCoordinates geometry;
+  private String id;
 }
