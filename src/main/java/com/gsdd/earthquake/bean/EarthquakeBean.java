@@ -7,9 +7,10 @@ import com.gsdd.earthquake.domain.EarthquakeRequest;
 import com.gsdd.earthquake.service.EarthquakeService;
 import com.gsdd.earthquake.util.EartquakeFeatureUtil;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
@@ -27,6 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 public class EarthquakeBean implements Serializable {
 
   private static final long serialVersionUID = 3775215271079611932L;
+  private static final DateTimeFormatter FORMATTER =
+      DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
   private static final String GOOGLE_MAPS_QUERY = "https://maps.google.com/?q=%s&ll=%s&z=4";
   private static final String INDEX_FACES = "index.faces";
   private static final String UI_ICON_CLOSE = "ui-icon-close";
@@ -114,9 +117,8 @@ public class EarthquakeBean implements Serializable {
     log.debug("Date: {}", props.getTime());
     setSelectedEarthquake(props);
     Date date = new Date(props.getTime());
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    getSelectedEarthquake().setDate(dateFormat.format(date));
+    getSelectedEarthquake()
+        .setDate(FORMATTER.format(LocalDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC)));
     getSelectedEarthquake().setMap(props.getUrl() + "/map");
     String coordinates = geometry.getCoordinates()[1] + "," + geometry.getCoordinates()[0];
     getSelectedEarthquake()

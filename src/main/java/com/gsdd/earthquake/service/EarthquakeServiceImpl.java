@@ -3,11 +3,10 @@ package com.gsdd.earthquake.service;
 import com.gsdd.earthquake.domain.EarthquakeCount;
 import com.gsdd.earthquake.domain.EarthquakeRequest;
 import com.gsdd.earthquake.domain.EarthquakeResponse;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,13 +17,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class EarthquakeServiceImpl implements EarthquakeService {
 
+  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
   private final WebClient usgsClient;
 
   @Override
   public EarthquakeResponse earthquakeQuery(EarthquakeRequest request) throws Exception {
-    SimpleDateFormat dateFormat = setUpDateFormat();
-    String startTime = setUpStartTime(request, dateFormat);
-    String endTime = setUpEndTime(request, dateFormat);
+    String startTime = setUpStartTime(request);
+    String endTime = setUpEndTime(request);
     log.info(
         "About to call query service for request {} - starttime: {} - endtime: {}",
         request,
@@ -47,9 +46,8 @@ public class EarthquakeServiceImpl implements EarthquakeService {
 
   @Override
   public EarthquakeCount earthquakeCountQuery(EarthquakeRequest request) throws Exception {
-    SimpleDateFormat dateFormat = setUpDateFormat();
-    String startTime = setUpStartTime(request, dateFormat);
-    String endTime = setUpEndTime(request, dateFormat);
+    String startTime = setUpStartTime(request);
+    String endTime = setUpEndTime(request);
     log.info(
         "About to call count service for request: {} - starttime: {} - endtime: {}",
         request,
@@ -68,30 +66,20 @@ public class EarthquakeServiceImpl implements EarthquakeService {
         .block(Duration.ofMinutes(1L));
   }
 
-  private SimpleDateFormat setUpDateFormat() {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    return dateFormat;
+  private String setUpStartTime(EarthquakeRequest request) {
+    LocalDate date = LocalDate.now(ZoneOffset.UTC).plusDays(-request.getDays());
+    if (request.isByDateRange()) {
+      date = request.getIniDate().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+    }
+    return FORMATTER.format(date);
   }
 
-  private String setUpStartTime(EarthquakeRequest request, SimpleDateFormat dateFormat) {
-    Calendar cal = Calendar.getInstance();
-    cal.add(Calendar.DATE, -request.getDays());
-    Date startTime = cal.getTime();
+  private String setUpEndTime(EarthquakeRequest request) {
+    LocalDate date = LocalDate.now(ZoneOffset.UTC);
     if (request.isByDateRange()) {
-      startTime = request.getIniDate();
+      date = request.getEndDate().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
     }
-    return dateFormat.format(startTime);
-  }
-
-  private String setUpEndTime(EarthquakeRequest request, SimpleDateFormat dateFormat) {
-    Date date = new Date();
-    if (request.isByDateRange()) {
-      date = request.getEndDate();
-    }
-    String endTime = dateFormat.format(date);
-    endTime += " 23:59:59.999";
-    return endTime;
+    return FORMATTER.format(date) + " 23:59:59.999";
   }
 
 }
