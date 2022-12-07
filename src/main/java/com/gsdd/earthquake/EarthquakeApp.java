@@ -29,8 +29,8 @@ public class EarthquakeApp {
   @Bean
   public ServletContextInitializer servletContextInitializer() {
     return servletContext -> {
-      servletContext.setInitParameter(
-          "com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
+      servletContext
+          .setInitParameter("com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
       servletContext.setInitParameter("primefaces.THEME", "sunny");
     };
   }

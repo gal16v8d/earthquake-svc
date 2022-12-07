@@ -58,6 +58,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
@@ -299,13 +303,14 @@
 					</formats>
 					<!-- define a language-specific format -->
 					<java>
-						<googleJavaFormat>
-							<version>1.15.0</version>
-							<reflowLongStrings>true</reflowLongStrings>
-						</googleJavaFormat>
+						<eclipse>
+                            <version>4.21.0</version>
+                            <file>${project.basedir}/config/eclipse-google-formatter.xml</file>
+                        </eclipse>
+						<importOrder>
+							<file>${project.basedir}/config/formatter.importorder</file>
+						</importOrder>
 						<trimTrailingWhitespace />
-						<endWithNewline />
-						<removeUnusedImports />
 					</java>
 				</configuration>
 				<executions>

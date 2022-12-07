@@ -71,7 +71,7 @@ public class EarthquakeBean implements Serializable {
     setEndDate(date);
   }
 
-  public String consultarSismos() {
+  public String searchEarthquakes() {
     log.debug("Invoke searchEarthquakes...");
     if (isByDateRange()) {
       if (getIniDate() == null || getEndDate() == null) {
@@ -84,7 +84,8 @@ public class EarthquakeBean implements Serializable {
       log.info("Difference in days is {}", calcDays);
       if (calcDays > 30 || calcDays < 0) {
         log.info(
-            "Can not perform search if days are not in range [0,30], current value: {}", calcDays);
+            "Can not perform search if days are not in range [0,30], current value: {}",
+            calcDays);
         features.setRowCount(0);
         return INDEX_FACES;
       }

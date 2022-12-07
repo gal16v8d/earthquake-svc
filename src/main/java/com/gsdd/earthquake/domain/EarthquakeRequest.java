@@ -1,11 +1,9 @@
 package com.gsdd.earthquake.domain;
 
 import java.util.Date;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class EarthquakeRequest {
 
   private double minMagnitude;

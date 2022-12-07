@@ -24,12 +24,8 @@ public class EartquakeFeatureUtil extends LazyDataModel<EarthquakeFeatures> {
   private EarthquakeRequest earthquakeRequest;
 
   @Override
-  public List<EarthquakeFeatures> load(
-      int first,
-      int pageSize,
-      String sortField,
-      SortOrder sortOrder,
-      Map<String, FilterMeta> filters) {
+  public List<EarthquakeFeatures> load(int first, int pageSize, String sortField,
+      SortOrder sortOrder, Map<String, FilterMeta> filters) {
     List<EarthquakeFeatures> result = new ArrayList<>();
     try {
       log.info("Invoke pagination searchEarthquakes");
