@@ -7,6 +7,7 @@ import com.gsdd.earthquake.domain.EarthquakeResponse;
 public interface EarthquakeService {
 
   EarthquakeResponse earthquakeQuery(EarthquakeRequest request) throws Exception;
+
   EarthquakeCount earthquakeCountQuery(EarthquakeRequest request) throws Exception;
-  
+
 }
