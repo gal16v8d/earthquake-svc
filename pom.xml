@@ -29,11 +29,11 @@
 		<java.version>17</java.version>
 
 		<mvn.jacoco.plugin.version>0.8.8</mvn.jacoco.plugin.version>
-		<mvn.failsafe.plugin.version>3.0.0-M5</mvn.failsafe.plugin.version>
-		<mvn.surefire.plugin.version>3.0.0-M5</mvn.surefire.plugin.version>
+		<mvn.failsafe.plugin.version>3.0.0-M8</mvn.failsafe.plugin.version>
+		<mvn.surefire.plugin.version>3.0.0-M8</mvn.surefire.plugin.version>
 		<mvn.spotless.plugin.version>2.22.1</mvn.spotless.plugin.version>
-		<mvn.checkstyle.plugin.version>3.1.2</mvn.checkstyle.plugin.version>
-		<mvn.dependency-check.plugin.version>7.1.0</mvn.dependency-check.plugin.version>
+		<mvn.checkstyle.plugin.version>3.2.1</mvn.checkstyle.plugin.version>
+		<mvn.dependency-check.plugin.version>8.0.2</mvn.dependency-check.plugin.version>
 		<mvn.dependency.plugin.version>3.3.0</mvn.dependency.plugin.version>
 
 		<!-- If true skips UT test execution -->

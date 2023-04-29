@@ -8,7 +8,6 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class EarthquakeApp {
@@ -38,10 +37,5 @@ public class EarthquakeApp {
   @Bean
   public ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
     return new ServletListenerRegistrationBean<>(new ConfigureListener());
-  }
-
-  @Bean
-  public RestTemplate restTemplate() {
-    return new RestTemplate();
   }
 }
