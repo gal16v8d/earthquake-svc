@@ -12,8 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class EarthquakeConfig {
 
   @Bean
-  public WebClient usgsClient(WebClient.Builder builder,
-      @Value("${usgs.base-url}") String usgsBaseUrl) {
+  WebClient usgsClient(WebClient.Builder builder, @Value("${usgs.base-url}") String usgsBaseUrl) {
     return builder.baseUrl(usgsBaseUrl).defaultHeaders(this::usgsDefaultHeaders).build();
   }
 

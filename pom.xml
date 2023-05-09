@@ -2,32 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.6</version>
+		<version>2.7.11</version>
 		<relativePath />
 	</parent>
-
 	<groupId>com.gsdd</groupId>
 	<artifactId>earthquake-svc</artifactId>
 	<version>2.0.1</version>
 	<packaging>jar</packaging>
-
 	<name>earthquake-svc</name>
 	<organization>
 		<name>GSDD</name>
 	</organization>
-
 	<properties>
 		<project.encoding>UTF-8</project.encoding>
 		<project.build.sourceEncoding>${project.encoding}</project.build.sourceEncoding>
 		<project.build.targetEncoding>${project.encoding}</project.build.targetEncoding>
 		<project.reporting.outputEncoding>${project.encoding}</project.reporting.outputEncoding>
 		<java.version>17</java.version>
-
 		<mvn.jacoco.plugin.version>0.8.8</mvn.jacoco.plugin.version>
 		<mvn.failsafe.plugin.version>3.0.0-M8</mvn.failsafe.plugin.version>
 		<mvn.surefire.plugin.version>3.0.0-M8</mvn.surefire.plugin.version>
@@ -35,14 +30,11 @@
 		<mvn.checkstyle.plugin.version>3.2.1</mvn.checkstyle.plugin.version>
 		<mvn.dependency-check.plugin.version>8.0.2</mvn.dependency-check.plugin.version>
 		<mvn.dependency.plugin.version>3.3.0</mvn.dependency.plugin.version>
-
 		<!-- If true skips UT test execution -->
 		<skip.unit.tests>false</skip.unit.tests>
 		<!-- If true skips IT test execution -->
 		<skip.integration.tests>true</skip.integration.tests>
-
 		<checkstyle.version>10.1</checkstyle.version>
-
 		<jsf.api.version>2.2.20</jsf.api.version>
 		<primefaces.version>8.0</primefaces.version>
 		<primefaces.theme.version>1.0.10</primefaces.theme.version>
@@ -51,7 +43,6 @@
 		<itext.version>2.1.7</itext.version>
 		<xmlbeans.version>3.1.0</xmlbeans.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -135,8 +126,17 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>mockwebserver</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
-
 	<repositories>
 		<repository>
 			<id>central</id>
@@ -151,7 +151,6 @@
 			<url>https://repository.primefaces.org/</url>
 		</repository>
 	</repositories>
-
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -169,18 +168,16 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
 			<!-- Used for unit tests -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${mvn.surefire.plugin.version}</version><!--$NO-MVN-MAN-VER$ -->
+				<version>${mvn.surefire.plugin.version}</version> <!--$NO-MVN-MAN-VER$ -->
 				<configuration>
 					<skipTests>${skip.unit.tests}</skipTests>
 					<!-- Excludes integration tests when unit tests are run. -->
@@ -189,11 +186,10 @@
 					</excludes>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>${mvn.failsafe.plugin.version}</version><!--$NO-MVN-MAN-VER$ -->
+				<version>${mvn.failsafe.plugin.version}</version> <!--$NO-MVN-MAN-VER$ -->
 				<executions>
 					<execution>
 						<id>integration-tests</id>
@@ -207,7 +203,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -224,7 +219,6 @@
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-
 					<execution>
 						<id>post-unit-test</id>
 						<phase>test</phase>
@@ -232,7 +226,6 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
-
 					<execution>
 						<id>pre-integration-test</id>
 						<phase>pre-integration-test</phase>
@@ -240,7 +233,6 @@
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-
 					<execution>
 						<id>post-integration-test</id>
 						<phase>post-integration-test</phase>
@@ -248,7 +240,6 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
-
 					<execution>
 						<id>jacoco-check</id>
 						<goals>
@@ -280,7 +271,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>com.diffplug.spotless</groupId>
 				<artifactId>spotless-maven-plugin</artifactId>
@@ -304,9 +294,9 @@
 					<!-- define a language-specific format -->
 					<java>
 						<eclipse>
-                            <version>4.21.0</version>
-                            <file>${project.basedir}/config/eclipse-google-formatter.xml</file>
-                        </eclipse>
+							<version>4.21.0</version>
+							<file>${project.basedir}/config/eclipse-google-formatter.xml</file>
+						</eclipse>
 						<importOrder>
 							<file>${project.basedir}/config/formatter.importorder</file>
 						</importOrder>
@@ -322,7 +312,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
@@ -342,7 +331,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
@@ -361,7 +349,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>

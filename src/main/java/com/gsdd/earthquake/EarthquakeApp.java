@@ -17,7 +17,7 @@ public class EarthquakeApp {
   }
 
   @Bean
-  public ServletRegistrationBean<FacesServlet> facesServletRegistration() {
+  ServletRegistrationBean<FacesServlet> facesServletRegistration() {
     ServletRegistrationBean<FacesServlet> registration =
         new ServletRegistrationBean<>(new FacesServlet(), "*.xhtml");
     registration.setLoadOnStartup(1);
@@ -26,7 +26,7 @@ public class EarthquakeApp {
   }
 
   @Bean
-  public ServletContextInitializer servletContextInitializer() {
+  ServletContextInitializer servletContextInitializer() {
     return servletContext -> {
       servletContext
           .setInitParameter("com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
@@ -35,7 +35,7 @@ public class EarthquakeApp {
   }
 
   @Bean
-  public ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
+  ServletListenerRegistrationBean<ConfigureListener> jsfConfigureListener() {
     return new ServletListenerRegistrationBean<>(new ConfigureListener());
   }
 }
