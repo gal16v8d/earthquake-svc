@@ -102,9 +102,10 @@ public class EarthquakeBean implements Serializable {
 
   private void getEarthquakeCount(EarthquakeRequest request) {
     try {
-      EarthquakeCount count = getEarthquakeSvc().earthquakeCountQuery(request);
-      features.setRowCount(count.getCount());
-      log.info("Row Count: {}", features.getRowCount());
+      getEarthquakeSvc().earthquakeCountQuery(request).subscribe((EarthquakeCount response) -> {
+        features.setRowCount(response.getCount());
+        log.info("Row Count: {}", features.getRowCount());
+      });
     } catch (Exception e) {
       log.error("Couldn't get count data", e);
     }

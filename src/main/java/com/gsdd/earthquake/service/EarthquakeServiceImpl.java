@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -45,7 +46,7 @@ public class EarthquakeServiceImpl implements EarthquakeService {
   }
 
   @Override
-  public EarthquakeCount earthquakeCountQuery(EarthquakeRequest request) throws Exception {
+  public Mono<EarthquakeCount> earthquakeCountQuery(EarthquakeRequest request) throws Exception {
     String startTime = setUpStartTime(request);
     String endTime = setUpEndTime(request);
     log.info(
@@ -62,8 +63,7 @@ public class EarthquakeServiceImpl implements EarthquakeService {
                 .queryParam("minmagnitude", request.getMinMagnitude())
                 .build())
         .retrieve()
-        .bodyToMono(EarthquakeCount.class)
-        .block(Duration.ofMinutes(1L));
+        .bodyToMono(EarthquakeCount.class);
   }
 
   private String setUpStartTime(EarthquakeRequest request) {
