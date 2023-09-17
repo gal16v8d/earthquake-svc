@@ -1,9 +1,9 @@
-spring:
-  application:
-    name: earthquake-svc
 server:
   port: 8092
   servlet:
     context-path: /earthquake-svc
+spring:
+  application:
+    name: earthquake-svc
 usgs:
   base-url: https://earthquake.usgs.gov/fdsnws/event/1/
