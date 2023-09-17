@@ -1,14 +1,28 @@
 # earthquake-svc
 
 Forked from: https://javarev.blogspot.com/
-
 Adding i18n support
 
-# docker
+### Pre-requisites
 
-## build
-docker build -t earthquake-svc .
-## launch
-docker run --rm -d -p 8092:8092 earthquake-svc
+* Maven 3
+* Java 17
+
+### Docker Image
+
+- In the project dir, build using the command:
+
+```bash
+docker build -t gsdd-earthquake-svc .
+```
+
+- Run the docker image as:
+
+```bash
+docker run --rm -d -p 8092:8092 gsdd-earthquake-svc
+```
+
 ## check
-Open in browser: http://localhost:8092/earthquake-svc/index.gg
+
+Open in browser: 
+- http://localhost:8092/earthquake-svc/index.gg

@@ -1,5 +1,14 @@
-FROM openjdk:17.0
+FROM openjdk:17-jdk-alpine
 LABEL maintainer="alex.galvis.sistemas@gmail.com"
-ADD target/earthquake-svc-2.0.1.jar earthquake-svc.jar
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy any JAR file from the target directory to the container
+COPY target/*.jar earthquake-svc.jar
+
+# Expose the port your Spring Boot app listens on (change as needed)
 EXPOSE 8092
-ENTRYPOINT ["java", "-jar","/earthquake-svc.jar"]
+
+# Command to run the application
+ENTRYPOINT ["java", "-jar", "earthquake-svc.jar"]
