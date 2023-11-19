@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-alpine
+FROM openjdk:21
 LABEL maintainer="alex.galvis.sistemas@gmail.com"
 
 # Set the working directory inside the container
