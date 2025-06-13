@@ -4,6 +4,8 @@ import com.gsdd.earthquake.domain.EarthquakeFeatures;
 import com.gsdd.earthquake.domain.EarthquakeRequest;
 import com.gsdd.earthquake.domain.EarthquakeResponse;
 import com.gsdd.earthquake.service.EarthquakeService;
+
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import org.primefaces.model.SortOrder;
 @Setter
 public class EartquakeFeatureUtil extends LazyDataModel<EarthquakeFeatures> {
 
+  @Serial
   private static final long serialVersionUID = 2797711935460952006L;
   private EarthquakeService earthquakeSvc;
   private EarthquakeRequest earthquakeRequest;
@@ -31,8 +34,8 @@ public class EartquakeFeatureUtil extends LazyDataModel<EarthquakeFeatures> {
       log.info("Invoke pagination searchEarthquakes");
       EarthquakeRequest request = getEarthquakeRequest();
       request.setStart(first + 1);
-      request.setLenght(pageSize);
-      log.info("Start: {} | Lenght: {}", request.getStart(), request.getLenght());
+      request.setLength(pageSize);
+      log.info("Start: {} | Length: {}", request.getStart(), request.getLength());
       EarthquakeResponse earthquakeResponse = getEarthquakeSvc().earthquakeQuery(request);
       result = earthquakeResponse.getFeatures();
       log.info("Finish pagination searchEarthquakes");

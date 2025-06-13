@@ -1,6 +1,7 @@
 package com.gsdd.earthquake.config;
 
-import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ public class EarthquakeConfig {
   }
 
   void usgsDefaultHeaders(HttpHeaders headers) {
-    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
     headers.setContentType(MediaType.APPLICATION_JSON);
   }
 }

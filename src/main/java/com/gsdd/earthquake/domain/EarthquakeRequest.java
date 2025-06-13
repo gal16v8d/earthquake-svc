@@ -12,5 +12,5 @@ public class EarthquakeRequest {
   private Date iniDate;
   private Date endDate;
   private int start = 1;
-  private int lenght = 10;
+  private int length = 10;
 }

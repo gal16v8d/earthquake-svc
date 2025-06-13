@@ -37,7 +37,7 @@ public class EarthquakeServiceImpl implements EarthquakeService {
                 .queryParam("starttime", startTime)
                 .queryParam("endtime", endTime)
                 .queryParam("minmagnitude", request.getMinMagnitude())
-                .queryParam("limit", request.getLenght())
+                .queryParam("limit", request.getLength())
                 .queryParam("offset", request.getStart())
                 .build())
         .retrieve()

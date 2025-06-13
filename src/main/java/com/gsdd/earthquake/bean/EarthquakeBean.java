@@ -6,6 +6,8 @@ import com.gsdd.earthquake.domain.EarthquakeProps;
 import com.gsdd.earthquake.domain.EarthquakeRequest;
 import com.gsdd.earthquake.service.EarthquakeService;
 import com.gsdd.earthquake.util.EartquakeFeatureUtil;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -27,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @SessionScoped
 public class EarthquakeBean implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 3775215271079611932L;
   private static final DateTimeFormatter FORMATTER =
       DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
